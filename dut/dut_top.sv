@@ -25,6 +25,8 @@ module dut_top(intf.dut i_intf);
     );
 
     // always @ * begin
+    //     $display("Time: %0d", $time);
+    //     $display("Reset: %0b", i_intf.reset);
     //     $display("addr_in =     0X%4h_%4h_%4h_%4h  addr_out =   0X%4h_%4h_%4h_%4h", i_intf.addr_in[63:48], i_intf.addr_in[47:32], i_intf.addr_in[31:16], i_intf.addr_in[15:0], i_intf.addr_out[63:48], i_intf.addr_out[47:32], i_intf.addr_out[31:16], i_intf.addr_out[15:0]);
     //     $display("data_in =     0X%4h_%4h_%4h_%4h  data_out =   0X%4h_%4h_%4h_%4h", i_intf.data_in[63:48], i_intf.data_in[47:32], i_intf.data_in[31:16], i_intf.data_in[15:0], i_intf.data_out[63:48], i_intf.data_out[47:32], i_intf.data_out[31:16], i_intf.data_out[15:0]);
     //     $display();

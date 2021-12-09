@@ -47,6 +47,7 @@ class environment;
 
     task test();
         $display("[Environment]: Start of test() at %0d", $time);
+        // @(vif_gen.clk); // wait for reset
         fork
             gen.main();
             driv.main();
@@ -61,6 +62,15 @@ class environment;
 
     task post_test();
         $display("[Environment]: Start of post_test() at %0d", $time);
+        $display("----------------------------------------------");
+        $display("[Environment]: Packets checked: %0d", scb.packets_checked);
+        $display("[Environment]: There were %0d errors detected.", scb.error_count);
+        if (scb.error_count > 0) begin
+            $display("[Environment]: Errors occurred at times:");
+            while(scb.error_time_queue.size() > 0) begin
+                $display("%0d", scb.error_time_queue.pop_back());
+            end
+        end
         $display("[Environment]: End of post_test() at %0d", $time);
     endtask
 

@@ -6,7 +6,7 @@ program test(intf.generator intf_gen, intf.driver intf_driv, intf.monitor intf_m
 
     initial begin
         env = new(intf_gen, intf_driv, intf_mon);
-        env.gen.initialize();
+        env.gen.init_DUT();
         env.gen.generate_transaction(
                 64'hAAAA_BBBB_CCCC_DDDD, // data_in
                 64'h0003_0002_0001_0000, // addr_in
@@ -79,6 +79,7 @@ program test(intf.generator intf_gen, intf.driver intf_driv, intf.monitor intf_m
                 2'b00, // port_sel
                 16'h0000 // port_addr
         );
+        env.gen.init_params(1'b0, env.gen.transaction_queue.size());
         $display("[Testbench]: Start of testcase(s) at %0d", $time);
 
         env.run();

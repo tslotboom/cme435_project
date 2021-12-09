@@ -27,14 +27,38 @@ class transaction;
     rand logic [15:0]   port_addr;
 
     constraint c_addr_in {
-        addr_in[15:0] < 4;
-        addr_in[31:16] < 4;
-        addr_in[47:32] < 4;
-        addr_in[63:48] < 4;
+        soft addr_in[15:0] < 4;
+        soft addr_in[31:16] < 4;
+        soft addr_in[47:32] < 4;
+        soft addr_in[63:48] < 4;
+    }
+
+    constraint unique_address {
+        unique {addr_in[15:0], addr_in[31:16], addr_in[47:32], addr_in[63:48]};
     }
 
     constraint c_port_addr {
-        port_addr[15:0] < 4;
+        soft port_addr[15:0] < 4;
+    }
+
+    constraint c_rd_en {
+        if (data_rdy[0] == 1'b0)
+            soft rd_en[0] == 1'b0;
+        if (data_rdy[1] == 1'b0)
+            soft rd_en[1] == 1'b0;
+        if (data_rdy[2] == 1'b0)
+            soft rd_en[2] == 1'b0;
+        if (data_rdy[3] == 1'b0)
+            soft rd_en[3] == 1'b0;
+    }
+
+    constraint make_life_easy {
+        soft prio_val == 0;
+        soft prio_wr == 0;
+        soft port_en == 0;
+        soft port_wr == 0;
+        soft port_sel == 0;
+        soft port_addr == 0;
     }
 
     function void display(string name);
@@ -51,9 +75,10 @@ class transaction;
     $display("%s: fifo_empty =  0B%4b   fifo_full =   0B%4b", name, fifo_empty, fifo_full);
     $display("%s: fifo_ae =     0B%4b   fifo_af =     0B%4b", name, fifo_ae, fifo_af);
     $display();
-    $display("%s: prio_val =    0X%2h   prio_wr =     0B%1b", name, prio_val, prio_wr);
     $display("%s: port_en =     0B%1b   port_wr =     0B%1b", name, port_en, port_wr);
     $display("%s: port_sel =    0X%1h   port_addr =   0X%4h", name, port_sel, port_addr);
+    $display("%s: prio_val =    0X%2h   prio_wr =     0B%1b", name, prio_val, prio_wr);
+
     endfunction
 endclass
 

@@ -1,4 +1,7 @@
 `ifndef _DRIVER_
+
+// `define PRINT_DRIVER
+
 `define _DRIVER_
 class driver;
     virtual intf.driver vif_driver;
@@ -29,8 +32,9 @@ class driver;
             trans.data_out = vif_driver.driver_cb.data_out;
             trans.addr_out = vif_driver.driver_cb.addr_out;
             trans.data_rdy = vif_driver.driver_cb.data_rdy;
-
-            // trans.display("[Driver]");
+            `ifdef PRINT_DRIVER
+                trans.display("[Driver]");
+            `endif
             vif_driver.driver_cb.data_in <= trans.data_in;
             vif_driver.driver_cb.addr_in <= trans.addr_in;
             vif_driver.driver_cb.wr_en <= trans.wr_en;

@@ -1,5 +1,8 @@
 `ifndef _GENERATOR_
 `define _GENERATOR_
+
+// `define PRINT_GENERATOR
+
 `include "transaction.sv"
 class generator;
     virtual intf.generator vif_gen;
@@ -14,6 +17,8 @@ class generator;
 
     int packets_generated;
 
+    bit randomize_flag = 1'b0;
+    bit randomize_this_packet = 1'b0;
     event ended;
 
     mailbox gen2driv;
@@ -28,7 +33,12 @@ class generator;
         this.scb2gen = scb2gen;
     endfunction
 
-    task initialize(); // set port addresses
+    function init_params(bit randomize_flag, int num_transactions);
+        this.randomize_flag = randomize_flag;
+        this.transactions_to_create = num_transactions;
+    endfunction
+
+    task init_DUT(); // set port addresses
         generate_transaction(
                 , // data_in
                 , // addr_in
@@ -66,8 +76,16 @@ class generator;
 
 
     task main();
-        while(transaction_queue.size() > 0) begin
+        while(transactions_to_create > 0) begin
+            // if (!randomize_flag)
+            if (randomize_flag && transaction_queue.size() == 0) begin
+                trans = new();
+                transaction_queue.push_front(trans);
+                randomize_this_packet = 1'b1;
+            end
             trans = transaction_queue.pop_back();
+            // else
+                // trans = new();
             trans.reset = vif_gen.reset;
 
             trans.data_rcv = vif_gen.data_rcv;
@@ -80,7 +98,13 @@ class generator;
             trans.data_out = vif_gen.data_out;
             trans.addr_out = vif_gen.addr_out;
             trans.data_rdy = vif_gen.data_rdy;
-            trans.display("[Generator]");
+            if (randomize_this_packet) begin
+                trans.randomize();
+                randomize_this_packet = 1'b0;
+            end
+            `ifdef PRINT_GENERATOR
+                trans.display("[Generator]");
+            `endif
             gen2driv.put(trans);
             packets_generated++;
             transactions_to_create--;

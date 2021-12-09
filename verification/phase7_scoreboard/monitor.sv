@@ -1,4 +1,7 @@
 `ifndef _MONITOR_
+
+// `define PRINT_MONITOR
+
 `define _MONITOR_
 class monitor;
     virtual intf.monitor vif_monitor;
@@ -42,7 +45,9 @@ class monitor;
             trans.port_addr = vif_monitor.monitor_cb.port_addr;
 
             mon2scb.put(trans);
-            // trans.display("[Monitor]");
+            `ifdef PRINT_MONITOR
+                trans.display("[Monitor]");
+            `endif
         end
     endtask
 

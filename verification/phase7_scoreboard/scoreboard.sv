@@ -35,7 +35,7 @@ class scoreboard;
     typedef struct {
         logic [63:0] data;
         logic [63:0] addr;
-        bit can_be_popped;
+        bit can_be_popped; // packets take 1 clock cycle to go from input to output
     } data_struct;
 
     // TODO: typedef struct for expected outputs at a port, then you can have an
@@ -82,7 +82,7 @@ class scoreboard;
                     for (int output_port = 0; output_port < 4; output_port++) begin
                         if (port_addresses[output_port] == trans.addr_in[input_port * 16 +:16]) begin
                             ds = '{trans.data_in[input_port * 16 +:16], input_port, 1'b0};
-                            $display("THERE, %0h, %0h", ds.data, ds.addr);
+                            // $display("THERE, %0h, %0h", ds.data, ds.addr);
                             data_fifo[output_port].push_back(ds);
                             // $display("input port %0d output port %0d", input_port, output_port);
                             break;
@@ -100,7 +100,7 @@ class scoreboard;
                 if (trans.rd_en[output_port] && trans.data_rdy[output_port] &&
                         data_fifo[output_port][0].can_be_popped) begin
                     ds = data_fifo[output_port].pop_front();
-                    $display("HERE, %0h, %0h", ds.data, ds.addr);
+                    // $display("HERE, %0h, %0h", ds.data, ds.addr);
                     expected_data_out[output_port * 16 +:16] = ds.data;
                     expected_addr_out[output_port * 16 +:16] = ds.addr;
                 end
@@ -160,8 +160,8 @@ class scoreboard;
                     trans.addr_out[port * 16 +:16]);
                 display_results("data_rdy", port, expected_data_rdy[port],
                     trans.data_rdy[port]);
-                // display_results("data_rcv", port, expected_data_rcv[port],
-                //     trans.data_rcv[port]);
+                display_results("data_rcv", port, expected_data_rcv[port],
+                    trans.data_rcv[port]);
                 display_results("fifo_empty", port, expected_fifo_empty[port],
                     trans.fifo_empty[port]);
                 display_results("fifo_ae", port, expected_fifo_ae[port],

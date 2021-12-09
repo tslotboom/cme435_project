@@ -43,7 +43,13 @@ class scoreboard;
     // results
 
     data_struct data_fifo [4][$];
-    logic [3:0] port_addresses [15:0];
+    logic [15:0] port_addresses [4];
+    // internal priorities of each port
+    logic [7:0] port_priorities [4];
+    // order in which ports should be accessed, based on priority. 0th index
+    // gets accessed first
+    logic [1:0] priority_order [4];
+    logic [1:0] priority_order_position;
 
     logic [63:0] expected_data_out;
     logic [63:0] expected_addr_out;
@@ -70,13 +76,43 @@ class scoreboard;
                 end
             end
 
+            // changing of port priorities
+            if (trans.prio_wr)
+                port_priorities[trans.port_sel] = trans.prio_val;
+
+            // determination of port priority order
+            for (int cur_port=0; cur_port<4; cur_port++) begin
+                priority_order_position = 2'd0;
+                for (int port=0; port<4; port++) begin
+                    if (cur_port == port)
+                        continue;
+                    if ((port_priorities[cur_port] == port_priorities[port]
+                            && cur_port > port) ||
+                            (port_priorities[cur_port] < port_priorities[port])) begin
+                        priority_order_position++;
+                        // $display("HERE, cur_port %0d port %0d priority_order_position %0d", cur_port, port, priority_order_position);
+                    end
+                end
+                priority_order[priority_order_position] = cur_port;
+            end
+            // for (int cur_port=0; cur_port<4; cur_port++) begin
+            //     $display("----------- port_addresses[%0d] %0d ------", cur_port, port_addresses[cur_port]);
+            //     $display("----------- priorities[%0d] %0d ------", cur_port, port_priorities[cur_port]);
+            //     $display("----------- priority_order[%0d] %0d ------", cur_port, priority_order[cur_port]);
+            //
+            // end
+            // $display("----------- port_addresses %p ------", port_addresses);
+            // $display("----------- port priorities %p ------", port_priorities);
+            // $display("----------- priority order %p ------", priority_order);
+
             // //display port_addresses
             // for (int i = 0; i < 4; i++) begin
             //     $display("port %0d: %0d", i, port_addresses[i]);
             // end
 
             // adding to data_fifo
-            for (int input_port = 0; input_port < 4; input_port++) begin
+            for (int port = 0; port < 4; port++) begin
+                logic [1:0] input_port = priority_order[port];
                 if (trans.wr_en[input_port]) begin
                     // TODO: what if there are two of the same address in the port's addresses?
                     for (int output_port = 0; output_port < 4; output_port++) begin
@@ -84,7 +120,7 @@ class scoreboard;
                             ds = '{trans.data_in[input_port * 16 +:16], input_port, 1'b0};
                             // $display("THERE, %0h, %0h", ds.data, ds.addr);
                             data_fifo[output_port].push_back(ds);
-                            // $display("input port %0d output port %0d", input_port, output_port);
+                            // $display("input port %0d output port %0d", port, output_port);
                             break;
                         end
                     end
@@ -197,7 +233,6 @@ class scoreboard;
         else begin
             result_string = "FAILURE";
             error_count++;
-            // errors_found = 1'b1;
             error_time_queue.push_front($time);
             `ifndef PRINT_SUCCESS
                 $display("[Scoreboard]: %s - expected %s[%0d] = %1h, actual %s[%0d] = %1h",
@@ -215,6 +250,10 @@ class scoreboard;
         port_addresses[1] = 16'h0000;
         port_addresses[2] = 16'h0000;
         port_addresses[3] = 16'h0000;
+        port_priorities[0] = 8'd0;
+        port_priorities[1] = 8'd0;
+        port_priorities[2] = 8'd0;
+        port_priorities[3] = 8'd0;
 
         expected_data_out = 64'hZZZZ_ZZZZ_ZZZZ_ZZZZ;
         expected_addr_out = 64'hZZZZ_ZZZZ_ZZZZ_ZZZZ;

@@ -22,11 +22,13 @@ class generator;
     event ended;
 
     mailbox gen2driv;
-    semaphore scb2gen;
+    mailbox scb2gen;
+
+    logic [15:0] port_addresses [4];
 
     function new(virtual intf.generator vif_gen,
             mailbox gen2driv,
-            semaphore scb2gen);
+            mailbox scb2gen);
         trans = new();
         this.vif_gen = vif_gen;
         this.gen2driv = gen2driv;
@@ -65,12 +67,46 @@ class generator;
                 2'b10, // port_sel
                 16'h0002 // port_addr
         );
-        generate_transaction( , , , , ,
+        generate_transaction( , , , ,
+                2'b0,
                 1'b0, // prio_wr
                 1'b1, // port_en
                 1'b1, // port_wr
                 2'b11, // port_sel
                 16'h0003 // port_addr
+        );
+        // set priorities
+        generate_transaction( , , , ,
+                2'b0, // prio_val
+                1'b1, // prio_wr
+                1'b0, // port_en
+                1'b0, // port_wr
+                2'b00, // port_sel
+                 // port_addr
+        );
+        generate_transaction( , , , ,
+                2'b0, // prio_val
+                1'b1, // prio_wr
+                1'b0, // port_en
+                , // port_wr
+                2'b01, // port_sel
+                 // port_addr
+        );
+        generate_transaction( , , , ,
+                2'b0, // prio_val
+                1'b1, // prio_wr
+                1'b0, // port_en
+                , // port_wr
+                2'b10, // port_sel
+                // port_addr
+        );
+        generate_transaction( , , , ,
+                2'b0, // prio_val
+                1'b1, // prio_wr
+                1'b0, // port_en
+                , // port_wr
+                2'b11, // port_sel
+                 // port_addr
         );
     endtask
 
@@ -98,6 +134,9 @@ class generator;
             trans.data_out = vif_gen.data_out;
             trans.addr_out = vif_gen.addr_out;
             trans.data_rdy = vif_gen.data_rdy;
+
+            trans.port_addresses = port_addresses;
+
             if (randomize_this_packet) begin
                 trans.randomize();
                 randomize_this_packet = 1'b0;
@@ -108,7 +147,7 @@ class generator;
             gen2driv.put(trans);
             packets_generated++;
             transactions_to_create--;
-            scb2gen.get();
+            scb2gen.get(port_addresses);
         end
     -> ended;
     endtask

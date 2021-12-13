@@ -18,7 +18,7 @@ class environment;
 
     mailbox gen2driv;
     mailbox mon2scb;
-    semaphore scb2gen;
+    mailbox scb2gen;
 
     function new(virtual intf.generator vif_gen,
             virtual intf.driver vif_driver,

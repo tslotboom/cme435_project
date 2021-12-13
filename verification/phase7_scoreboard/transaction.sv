@@ -26,19 +26,32 @@ class transaction;
     rand logic [1:0]    port_sel;
     rand logic [15:0]   port_addr;
 
+    logic [15:0] port_addresses [4];
+
+    // constraint c_addr_in_strict {
+    //     soft addr_in[15:0] < 4;
+    //     soft addr_in[31:16] < 4;
+    //     soft addr_in[47:32] < 4;
+    //     soft addr_in[63:48] < 4;
+    // }
+
     constraint c_addr_in {
-        soft addr_in[15:0] < 4;
-        soft addr_in[31:16] < 4;
-        soft addr_in[47:32] < 4;
-        soft addr_in[63:48] < 4;
+        soft addr_in[15:0] < 8;
+        soft addr_in[31:16] < 8;
+        soft addr_in[47:32] < 8;
+        soft addr_in[63:48] < 8;
     }
 
-    constraint unique_address {
-        unique {addr_in[15:0], addr_in[31:16], addr_in[47:32], addr_in[63:48]};
-    }
+    // constraint unique_address {
+    //     unique {addr_in[15:0], addr_in[31:16], addr_in[47:32], addr_in[63:48]};
+    // }
+
+    // constraint c_port_addr_strict {
+    //     port_addr < 4;
+    // }
 
     constraint c_port_addr {
-        soft port_addr[15:0] < 4;
+        port_addr < 8;
     }
 
     constraint c_rd_en {
@@ -52,14 +65,24 @@ class transaction;
             soft rd_en[3] == 1'b0;
     }
 
-    constraint make_life_easy {
+    constraint no_priority {
         soft prio_val == 0;
         soft prio_wr == 0;
-        soft port_en == 0;
-        soft port_wr == 0;
-        soft port_sel == 0;
-        soft port_addr == 0;
     }
+
+    constraint no_repeated_addresses {
+        soft port_addr != port_addresses[0];
+        soft port_addr != port_addresses[1];
+        soft port_addr != port_addresses[2];
+        soft port_addr != port_addresses[3];
+    }
+
+    // constraint make_life_easy {
+    // soft port_sel == 0;
+    //     soft port_en == 0;
+    //     soft port_wr == 0;
+    //     soft port_addr == 0;
+    // }
 
     function void display(string name);
     $display("------------------------------------------------------------");

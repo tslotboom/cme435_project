@@ -2,6 +2,7 @@
 `define _SCOREBOARD_
 
 // `define PRINT_SUCCESS
+`define STOP_ON_ERROR
 
 `define EMPTY 9'd0
 `define ALMOST_EMPTY 9'd64
@@ -13,9 +14,9 @@ class scoreboard;
 
     mailbox mon2scb;
 
-    semaphore scb2gen;
+    mailbox scb2gen;
 
-    function new(mailbox mon2scb, semaphore scb2gen);
+    function new(mailbox mon2scb, mailbox scb2gen);
         this.mon2scb = mon2scb;
         this.scb2gen = scb2gen;
     endfunction
@@ -29,6 +30,7 @@ class scoreboard;
 
     // prev values of DUT
     logic [3:0] prev_fifo_empty = 4'b1111;
+    logic [3:0] prev_fifo_full = 4'b1111;
 
     // expected values within DUT:
 
@@ -50,6 +52,7 @@ class scoreboard;
     // gets accessed first
     logic [1:0] priority_order [4];
     logic [1:0] priority_order_position;
+    bit address_valid;
 
     logic [63:0] expected_data_out;
     logic [63:0] expected_addr_out;
@@ -69,12 +72,18 @@ class scoreboard;
             trans.display("[Scoreboard]");
             packets_checked++;
 
+            if (trans.reset)
+                set_reset_values();
+            else begin // reset check
+
+
             // changing of port addresses
             if (trans.port_en) begin
                 if (trans.port_wr) begin
                     port_addresses[trans.port_sel] = trans.port_addr;
                 end
             end
+            $display("port addresses: %p", port_addresses);
 
             // changing of port priorities
             if (trans.prio_wr)
@@ -116,7 +125,8 @@ class scoreboard;
                 if (trans.wr_en[input_port]) begin
                     // TODO: what if there are two of the same address in the port's addresses?
                     for (int output_port = 0; output_port < 4; output_port++) begin
-                        if (port_addresses[output_port] == trans.addr_in[input_port * 16 +:16]) begin
+                        if (port_addresses[output_port] == trans.addr_in[input_port * 16 +:16] &&
+                                data_fifo[output_port].size() != `FULL) begin
                             ds = '{trans.data_in[input_port * 16 +:16], input_port, 1'b0};
                             // $display("THERE, %0h, %0h", ds.data, ds.addr);
                             data_fifo[output_port].push_back(ds);
@@ -134,6 +144,7 @@ class scoreboard;
             // data_out, addr_out
             for (int output_port = 0; output_port < 4; output_port++) begin
                 if (trans.rd_en[output_port] && trans.data_rdy[output_port] &&
+                        data_fifo[output_port].size() > 0 &&
                         data_fifo[output_port][0].can_be_popped) begin
                     ds = data_fifo[output_port].pop_front();
                     // $display("HERE, %0h, %0h", ds.data, ds.addr);
@@ -145,10 +156,22 @@ class scoreboard;
 
 
 
-            // // checking data_rcv
-            // for (int input_port = 0; input_port < 4; input_port++) begin
-            //
-            // end
+            // data_rcv
+            for (int input_port = 0; input_port < 4; input_port++) begin
+                address_valid = 1'b1;
+                for (int port=0; port<4; port++) begin
+                    if (trans.addr_in[port] == port_addresses[port])
+                        address_valid = 1'b1;
+                if (!address_valid)
+                    expected_data_rcv[port] = 1'b0;
+                else
+                    if (trans.wr_en[port])
+                        if (trans.fifo_full[port] && prev_fifo_full[port])
+                            expected_data_rcv[port] = 1'b0;
+                        else
+                            expected_data_rcv[port] = 1'b1;
+                    end
+            end
 
             // checking fifos
             for (int port = 0; port < 4; port++) begin
@@ -177,13 +200,15 @@ class scoreboard;
 
             // data_rdy
             for (int output_port = 0; output_port < 4; output_port++) begin
-                // if (trans.rd_en[output_port] && prev_data_rdy[output_port])
-                //     expected_data_rdy[output_port] = 1'b0;
+                // if (!trans.fifo_empty[output_port])
+                //     expected_data_rdy[output_port] = 1'b1;
                 if (trans.fifo_empty[output_port] && !prev_fifo_empty[output_port])
                     expected_data_rdy[output_port] = 1'b1;
                 else
                     expected_data_rdy[output_port] = ~expected_fifo_empty[output_port];
             end
+
+            end // reset check
 
             ////////////////////////////////////////////////////////////////////
                         // checking expected values
@@ -222,7 +247,8 @@ class scoreboard;
                     data_fifo[port][0].can_be_popped = 1'b1;
             end
             prev_fifo_empty = trans.fifo_empty;
-            scb2gen.put();
+            prev_fifo_full = trans.fifo_full;
+            scb2gen.put(port_addresses);
         end
     endtask
 
@@ -237,6 +263,9 @@ class scoreboard;
             `ifndef PRINT_SUCCESS
                 $display("[Scoreboard]: %s - expected %s[%0d] = %1h, actual %s[%0d] = %1h",
                     result_string, name, port, expected, name, port, result);
+            `endif
+            `ifdef STOP_ON_ERROR
+                $stop;
             `endif
         end
         `ifdef PRINT_SUCCESS
@@ -263,6 +292,10 @@ class scoreboard;
         expected_fifo_ae = 4'b1111;
         expected_fifo_af = 4'b0000;
         expected_fifo_full = 4'b0000;
+
+        for (int port=0; port<4; port++)
+            while (data_fifo[port].size() > 0)
+                data_fifo[port].pop_front();
     endfunction
 
 endclass

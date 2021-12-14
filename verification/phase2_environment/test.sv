@@ -1,6 +1,6 @@
 `ifndef _TEST_
 `define _TEST_
-`include "environment.sv"
+`include "phase2_environment.sv"
 program test(intf i_intf);
     environment env;
 

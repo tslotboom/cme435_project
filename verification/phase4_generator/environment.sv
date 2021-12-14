@@ -1,6 +1,6 @@
 `ifndef _ENVIRONMENT_
 `define _ENVIRONMENT_
-`include "generator.sv"
+`include "phase4_generator.sv"
 class environment;
 
     virtual intf.generator vif_gen;

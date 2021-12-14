@@ -150,6 +150,7 @@ class generator;
             scb2gen.get(port_addresses);
         end
     -> ended;
+    $display("AAAAAAAAAAAAAAAAAAAAAAAA");
     endtask
 
     function void generate_transaction(

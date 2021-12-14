@@ -1,7 +1,7 @@
 `ifndef _ENVIRONMENT_
 `define _ENVIRONMENT_
 `include "generator.sv"
-`include "driver.sv"
+`include "phase5_driver.sv"
 class environment;
 
     virtual intf.generator vif_gen;

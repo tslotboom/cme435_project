@@ -3,7 +3,7 @@
 `include "generator.sv"
 `include "driver.sv"
 `include "monitor.sv"
-`include "scoreboard.sv"
+`include "phase7_scoreboard.sv"
 
 class environment;
 
@@ -53,6 +53,7 @@ class environment;
             driv.main();
             mon.main();
             scb.main();
+            scb.wait_for_reset();
         join_any
         wait(gen.ended.triggered);
         wait(driv.packets_driven == gen.packets_generated);

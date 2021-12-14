@@ -2,7 +2,7 @@
 `define _ENVIRONMENT_
 `include "generator.sv"
 `include "driver.sv"
-`include "monitor.sv"
+`include "phase6_monitor.sv"
 
 class environment;
 

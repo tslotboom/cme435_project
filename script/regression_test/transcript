@@ -1,0 +1,9 @@
+# vsim tbench_top -c -do "coverage exclude -du tbench_top; coverage exclude -du xswitch; coverage exclude -du intf; coverage save -onexit ../../report/regression_test_random.ucdb; run -all; exit" 
+# Start time: 01:10:27 on Dec 20,2021
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# Break key hit
+# ** Fatal: (SIGINT) Compile interrupted.
+# Vopt Compiler exiting
+# Error loading design
+# End time: 01:10:27 on Dec 20,2021, Elapsed time: 0:00:00
+# Errors: 1, Warnings: 0

@@ -1,7 +1,7 @@
 #!/bin/csh
 source /CMC/scripts/mentor.questasim.2019.2.csh
 set rootdir = `dirname $0`
-cd rootdir
+cd $rootdir
 vsim -c -do "run.do"
 rm -r work
 rm transcript

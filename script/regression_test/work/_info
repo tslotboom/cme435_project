@@ -1,0 +1,279 @@
+m255
+K4
+z2
+!s11f vlog 2019.2 2019.04, Apr 16 2019
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 d/home/ths943/engr-ece/cme/435_verification/project/cme435_project/script/regression_test
+vassertions
+Z1 DXx6 sv_std 3 std 0 22 9oUSJO;AeEaW`l:M@^WG92
+Z2 !s110 1639984219
+!i10b 1
+!s100 V3J8@J>LSPE^C@lVK93>D2
+!s11b Q1aOeS;ln<<QW6UA:X23<3
+IJaKOWH>3jzKc^CUZ1]DNI3
+Z3 VDg1SIo80bB@j0V0VzS_@n1
+S1
+R0
+Z4 w1639983245
+8../../verification/phase9_testcases/assertions.sv
+F../../verification/phase9_testcases/assertions.sv
+L0 3
+Z5 OE;L;2019.2;69
+r1
+!s85 0
+31
+Z6 !s108 1639984219.000000
+Z7 !s107 ../../verification/phase9_testcases/assertions.sv|../../verification/phase9_testcases/interface.sv|../../verification/phase9_testcases/tbench_top.sv|../../dut/xswitch64_bugs.svp|../../dut/dut_top.sv|
+Z8 !s90 -f|./run.f|
+!i113 0
+Z9 o-L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+Z10 tCvgOpt 0
+vdut_top
+R1
+R2
+!i10b 1
+!s100 21MX?AK10ImYT5m<f2Q5f2
+!s11b `N<6daSF9TO57SMIBn1ZU0
+Ic;?N`jBYOGZb:KBfk^]`W2
+R3
+S1
+R0
+Z11 w1639983243
+8../../dut/dut_top.sv
+F../../dut/dut_top.sv
+L0 3
+R5
+r1
+!s85 0
+31
+R6
+R7
+R8
+!i113 0
+R9
+R10
+Yintf
+R1
+R2
+!i10b 1
+!s100 HP]?bLk3547NL8R6aWV;h2
+!s11b TGagFQM1BXAE]eM=jN>cm0
+I3o;K3=8Qk<aK@]UQMk?]=1
+R3
+S1
+R0
+R11
+8../../verification/phase9_testcases/interface.sv
+F../../verification/phase9_testcases/interface.sv
+L0 3
+R5
+r1
+!s85 0
+31
+R6
+R7
+R8
+!i113 0
+R9
+R10
+vtbench_top
+R1
+R2
+!i10b 1
+!s100 72DRXI`kgh@fNmXH9Y?:P2
+!s11b ZQW;cZHie=>`m68OBNAgn0
+I25B<@HVe=lVkLM=ZYM0YQ3
+R3
+S1
+R0
+R4
+8../../verification/phase9_testcases/tbench_top.sv
+F../../verification/phase9_testcases/tbench_top.sv
+L0 7
+R5
+r1
+!s85 0
+31
+R6
+R7
+R8
+!i113 0
+R9
+R10
+4test
+R1
+Z12 DXx4 work 16 xswitch_test_pkg 0 22 ^bo7Q[8DK7d5PM_BKafO13
+DXx4 work 19 test_random_sv_unit 0 22 HhdkEMS0Wh?ke?M=_H=P[3
+R3
+r1
+!s85 0
+!i10b 1
+!s100 ]7e=lFEbO9ZKcghcdTTHn2
+IbM<cfbfedJ>99=m9f[1HJ0
+!s105 test_random_sv_unit
+S1
+R0
+R4
+Z13 8../../verification/regression_test/test_random.sv
+Z14 F../../verification/regression_test/test_random.sv
+L0 4
+R5
+31
+Z15 !s108 1639984226.000000
+Z16 !s107 ../../verification/regression_test/scoreboard.sv|../../verification/regression_test/monitor.sv|../../verification/regression_test/driver.sv|../../verification/regression_test/xswitch_test_pkg.sv|../../verification/regression_test/generator.sv|../../verification/regression_test/environment.sv|../../verification/regression_test/test_random.sv|
+Z17 !s90 +cover=t|../../verification/regression_test/test_random.sv|
+!i113 0
+Z18 !s102 +cover=t
+Z19 o+cover=t -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+R10
+Xtest_random_sv_unit
+Z20 !s115 intf
+R1
+R12
+VHhdkEMS0Wh?ke?M=_H=P[3
+r1
+!s85 0
+!i10b 1
+!s100 TQiJe@HIkWGlf8BfA3BLQ2
+IHhdkEMS0Wh?ke?M=_H=P[3
+!i103 1
+S1
+R0
+R4
+R13
+R14
+Z21 F../../verification/regression_test/environment.sv
+Z22 F../../verification/regression_test/generator.sv
+Z23 F../../verification/regression_test/xswitch_test_pkg.sv
+Z24 F../../verification/regression_test/driver.sv
+Z25 F../../verification/regression_test/monitor.sv
+Z26 F../../verification/regression_test/scoreboard.sv
+L0 8
+R5
+31
+R15
+R16
+R17
+!i113 0
+R18
+R19
+R10
+Xtest_sanity_directed_sv_unit
+R20
+R1
+R12
+VDz[`V02mEbYQh5IKDd;@R2
+r1
+!s85 0
+!i10b 1
+!s100 dDJMB[f]769e6O4:4NkWi2
+IDz[`V02mEbYQh5IKDd;@R2
+!i103 1
+S1
+R0
+w1639983247
+8../../verification/regression_test/test_sanity_directed.sv
+F../../verification/regression_test/test_sanity_directed.sv
+R21
+R22
+R23
+R24
+R25
+R26
+L0 8
+R5
+31
+R6
+!s107 ../../verification/regression_test/scoreboard.sv|../../verification/regression_test/monitor.sv|../../verification/regression_test/driver.sv|../../verification/regression_test/xswitch_test_pkg.sv|../../verification/regression_test/generator.sv|../../verification/regression_test/environment.sv|../../verification/regression_test/test_sanity_directed.sv|
+!s90 +cover=t|../../verification/regression_test/test_sanity_directed.sv|
+!i113 0
+R18
+R19
+R10
+Xtest_sanity_sv_unit
+R20
+R1
+R12
+VB3D?i7C?Tk`X<W8Mn1>1Z1
+r1
+!s85 0
+!i10b 1
+!s100 OggFHi=d<elKA:g^Fg0HY2
+IB3D?i7C?Tk`X<W8Mn1>1Z1
+!i103 1
+S1
+R0
+R4
+8../../verification/regression_test/test_sanity.sv
+F../../verification/regression_test/test_sanity.sv
+R21
+R22
+R23
+R24
+R25
+R26
+L0 8
+R5
+31
+!s108 1639984222.000000
+!s107 ../../verification/regression_test/scoreboard.sv|../../verification/regression_test/monitor.sv|../../verification/regression_test/driver.sv|../../verification/regression_test/xswitch_test_pkg.sv|../../verification/regression_test/generator.sv|../../verification/regression_test/environment.sv|../../verification/regression_test/test_sanity.sv|
+!s90 +cover=t|../../verification/regression_test/test_sanity.sv|
+!i113 0
+R18
+R19
+R10
+vxswitch
+R1
+R2
+!i10b 1
+!s100 l42[kUoCB9]Y]kJ@]j3W81
+!s11b Q1B57DGfoB?gYB84G18=z2
+IkTG:`k>[7fUI9?[68:@a@3
+R3
+!i119 1
+S1
+R0
+w1639983242
+8../../dut/xswitch64_bugs.svp
+F../../dut/xswitch64_bugs.svp
+L0 1
+R5
+r1
+!s85 0
+31
+R6
+R7
+R8
+!i113 0
+R9
+R10
+Xxswitch_test_pkg
+R1
+!s110 1639984226
+!i10b 1
+!s100 iReA:@9[0`zQz5g?j;Z1e0
+!s11b [C<GGSA1<ERDiKbkYhYN43
+I^bo7Q[8DK7d5PM_BKafO13
+V^bo7Q[8DK7d5PM_BKafO13
+S1
+R0
+R4
+8../../verification/regression_test/xswitch_test_pkg.sv
+R23
+L0 3
+R5
+r1
+!s85 0
+31
+R15
+R16
+R17
+!i113 0
+R18
+R19
+R10
